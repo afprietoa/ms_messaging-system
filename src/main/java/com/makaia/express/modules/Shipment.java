@@ -6,14 +6,15 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
+
 @ApiModel(description ="this model represents the shipment data")
 @Entity
 @Table(name = "shipment")
 public class Shipment implements Serializable {
     @ApiModelProperty(value = "shipment id", example ="81F065276A")
     @Id
-    private String guideNumber;
+    private Integer guideNumber;
     @ApiModelProperty(value = "shipment origin city", example ="Medellin")
     @Column(name = "originCity", length = 50)
     private String originCity;
@@ -28,7 +29,7 @@ public class Shipment implements Serializable {
     private String recipientName;
     @ApiModelProperty(value = "shipment recipient contact", example ="3046303886")
     @Column(name = "recipientContact")
-    private Integer recipientContact;
+    private Long recipientContact;
     @ApiModelProperty(value = "shipment delivery hour", example ="2")
     @Column(name = "deliveryHour")
     private Integer deliveryHour;
@@ -44,13 +45,30 @@ public class Shipment implements Serializable {
     private Customer customer;
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "shipment")
     @JsonIgnoreProperties("shipment")
-    private Set<Packet> packets;
+    private List<Packet> packets;
 
-    public String getGuideNumber() {
+    public Shipment() {}
+
+    public Shipment(Integer guideNumber, String originCity, String destinyCity, String destinyAddress,
+                    String recipientName, Long recipientContact, Integer deliveryHour,
+                    String shipmentState, Double shippingCosts, Customer customer) {
+        this.guideNumber = guideNumber;
+        this.originCity = originCity;
+        this.destinyCity = destinyCity;
+        this.destinyAddress = destinyAddress;
+        this.recipientName = recipientName;
+        this.recipientContact = recipientContact;
+        this.deliveryHour = deliveryHour;
+        this.shipmentState = shipmentState;
+        this.shippingCosts = shippingCosts;
+        this.customer = customer;
+    }
+
+    public Integer getGuideNumber() {
         return guideNumber;
     }
 
-    public void setGuideNumber(String guideNumber) {
+    public void setGuideNumber(Integer guideNumber) {
         this.guideNumber = guideNumber;
     }
 
@@ -94,11 +112,11 @@ public class Shipment implements Serializable {
         this.recipientName= recipientName;
     }
 
-    public Integer getRecipientContact() {
+    public Long getRecipientContact() {
         return recipientContact;
     }
 
-    public void setRecipientContact(Integer recipientContact) {
+    public void setRecipientContact(Long recipientContact) {
         this.recipientContact = recipientContact;
     }
 
@@ -126,11 +144,11 @@ public class Shipment implements Serializable {
         this.shippingCosts = shippingCosts;
     }
 
-    public Set<Packet> getPackets() {
+    public List<Packet> getPackets() {
         return packets;
     }
 
-    public void setPackets(Set<Packet> packets) {
+    public void setPackets(List<Packet> packets) {
         this.packets = packets;
     }
 }

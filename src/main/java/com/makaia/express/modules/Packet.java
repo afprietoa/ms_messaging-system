@@ -30,7 +30,15 @@ public class Packet implements Serializable {
     @JsonIgnoreProperties("packets")
     private Shipment shipment;
 
+    public Packet() {}
 
+    public Packet(Integer code, String packetType, Double weight,
+                  Double declaredValue) {
+        this.code = code;
+        this.packetType = packetType;
+        this.weight = weight;
+        this.declaredValue = declaredValue;
+    }
 
     public Integer getCode() {
         return code;

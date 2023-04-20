@@ -24,7 +24,7 @@ public class Employee implements Serializable {
     private String lastName;
     @ApiModelProperty(value = "employee cellphone", example ="3004126895")
     @Column(name = "cellphone")
-    private Integer cellphone;
+    private Long cellphone;
     @ApiModelProperty(value = "employee e-mail", example ="pau@example.com")
     @Column(name = "email", length = 100)
     private String email;
@@ -43,6 +43,24 @@ public class Employee implements Serializable {
     @ApiModelProperty(value = "employee type", example ="DEALER")
     @Column(name = "employeeType", length = 50)
     private String employeeType;
+
+    public Employee() {}
+
+    public Employee(Integer idCardNumber, String firstName, String lastName,
+                    Long cellphone, String email, String address,
+                    String city, Integer antiquity, String bloodType,
+                    String employeeType) {
+        this.idCardNumber = idCardNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cellphone = cellphone;
+        this.email = email;
+        this.address = address;
+        this.city = city;
+        this.antiquity = antiquity;
+        this.bloodType = bloodType;
+        this.employeeType = employeeType;
+    }
 
     public Integer getIdCardNumber() {
         return idCardNumber;
@@ -64,11 +82,11 @@ public class Employee implements Serializable {
         this.lastName = lastName;
     }
 
-    public Integer getCellphone() {
+    public Long getCellphone() {
         return cellphone;
     }
 
-    public void setCellphone(Integer cellphone) {
+    public void setCellphone(Long cellphone) {
         this.cellphone = cellphone;
     }
 

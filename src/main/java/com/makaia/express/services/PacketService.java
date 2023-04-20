@@ -1,7 +1,11 @@
 package com.makaia.express.services;
 
+import com.makaia.express.modules.Customer;
 import com.makaia.express.modules.Packet;
+import com.makaia.express.modules.Shipment;
+import com.makaia.express.modules.common.Size;
 import com.makaia.express.repositories.PacketRepository;
+import com.makaia.express.repositories.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,8 +14,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class PacketService {
-    @Autowired
+
     private PacketRepository packetRepository;
+    private ShipmentRepository shipmentRepository;
+
+    public PacketService(PacketRepository packetRepository, ShipmentRepository shipmentRepository) {
+        this.packetRepository = packetRepository;
+        this.shipmentRepository = shipmentRepository;
+    }
 
     /**
      *
@@ -44,14 +54,19 @@ public class PacketService {
      * @param newPacket
      * @return
      */
-    public Packet create(Packet newPacket){
+    public Packet create(Packet newPacket, int idShipment){
+
+        Optional<Shipment> shipment = this.shipmentRepository.findById(idShipment);
+
+        newPacket.setShipment(shipment.get());
+
         newPacket.setPacketType(
-                newPacket.getWeight()<2 ? "LIGHT" :
-                newPacket.getWeight()<5 ? "MEDIUM"
-                : "LARGE");
+                newPacket.getWeight()<2 ? String.valueOf(Size.SMALL) :
+                newPacket.getWeight()<5 ? String.valueOf(Size.MEDIUM)
+                : String.valueOf(Size.SMALL));
         newPacket.setDeclaredValue(
-                newPacket.getPacketType() == "LIGHT" ? 30.0:
-                newPacket.getPacketType() == "MEDIUM" ? 40.0
+                newPacket.getPacketType() == String.valueOf(Size.SMALL) ? 30.0:
+                newPacket.getPacketType() == String.valueOf(Size.MEDIUM) ? 40.0
                                 : 50.0);
         if(newPacket.getCode() != null){
             Optional<Packet> tempPacket = this.packetRepository.findById(newPacket.getCode());
@@ -62,7 +77,8 @@ public class PacketService {
 
         if((newPacket.getPacketType() != null) && (newPacket.getWeight() != null) &&
                 (newPacket.getDeclaredValue() != null)){
-            return this.packetRepository.save(newPacket);
+            this.packetRepository.save(newPacket);
+            return newPacket;
         }else
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Mandatory fields had not been provided.");
@@ -84,7 +100,8 @@ public class PacketService {
                     tempPacket.get().setWeight(packet.getWeight());
                 if(packet.getDeclaredValue() != null)
                     tempPacket.get().setDeclaredValue(packet.getDeclaredValue());
-                return this.packetRepository.save(tempPacket.get());
+                this.packetRepository.save(tempPacket.get());
+                return tempPacket.get();
             }
             else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,

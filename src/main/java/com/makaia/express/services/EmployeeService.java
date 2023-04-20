@@ -12,8 +12,12 @@ import java.util.Optional;
 
 @Service
 public class EmployeeService {
-    @Autowired
+
     private EmployeeRepository employeeRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     /**
      *
@@ -55,8 +59,9 @@ public class EmployeeService {
         }
 
         if((newEmployee.getEmail() != null) && (newEmployee.getFirstName() != null) &&
-                (newEmployee.getLastName() != null) && (newEmployee.getCellphone() != null)){
-            return this.employeeRepository.save(newEmployee);
+                (newEmployee.getLastName() != null) && (newEmployee.getCellphone() instanceof  Long)){
+            this.employeeRepository.save(newEmployee);
+            return newEmployee;
         }else
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Mandatory fields had not been provided.");
@@ -90,7 +95,8 @@ public class EmployeeService {
                     tempEmployee.get().setBloodType(employee.getBloodType());
                 if(employee.getEmployeeType() != null)
                     tempEmployee.get().setEmployeeType(employee.getEmployeeType());
-                return this.employeeRepository.save(tempEmployee.get());
+                this.employeeRepository.save(tempEmployee.get());
+                return tempEmployee.get();
             }
             else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,

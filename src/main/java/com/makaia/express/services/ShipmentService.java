@@ -1,8 +1,17 @@
 package com.makaia.express.services;
 
+import com.makaia.express.dto.ShipmentDTO;
+import com.makaia.express.exceptions.RequestException;
 import com.makaia.express.modules.Customer;
+import com.makaia.express.modules.Employee;
+import com.makaia.express.modules.Packet;
+import com.makaia.express.modules.Request.TrackingRequest;
 import com.makaia.express.modules.Shipment;
+import com.makaia.express.modules.common.Role;
+import com.makaia.express.modules.common.Size;
 import com.makaia.express.repositories.CustomerRepository;
+import com.makaia.express.repositories.EmployeeRepository;
+import com.makaia.express.repositories.PacketRepository;
 import com.makaia.express.repositories.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,12 +21,27 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ShipmentService {
-    @Autowired
+
     private ShipmentRepository shipmentRepository;
-    @Autowired
+
     private CustomerRepository customerRepository;
+
+    private PacketRepository packetRepository;
+
+    private EmployeeRepository employeeRepository;
+
+    public ShipmentService(ShipmentRepository shipmentRepository,
+                           CustomerRepository customerRepository,
+                           PacketRepository packetRepository,
+                           EmployeeRepository employeeRepository) {
+        this.shipmentRepository = shipmentRepository;
+        this.customerRepository = customerRepository;
+        this.packetRepository = packetRepository;
+        this.employeeRepository = employeeRepository;
+    }
 
     /**
      *
@@ -51,25 +75,25 @@ public class ShipmentService {
      * @return
      */
     public Shipment create(Shipment newShipment, int idCustomer){
-        UUID uuid = UUID.randomUUID();
-        newShipment.setGuideNumber(
-                uuid.toString().toUpperCase().substring(uuid.toString().lastIndexOf("-") + 1,uuid.toString().length() - 2)
-        );
-        int code = Math.abs(newShipment.getGuideNumber().hashCode());
+
         Optional<Customer> customer = this.customerRepository.findById(idCustomer);
 
         newShipment.setCustomer(customer.get());
 
+        List<Customer> customerList = (List<Customer>) this.customerRepository.findAll();
+
         if(newShipment.getGuideNumber() != null){
-            Optional<Shipment> tempShipment = this.shipmentRepository.findById(code);
+            Optional<Shipment> tempShipment = this.shipmentRepository.findById(newShipment.getGuideNumber());
             if(tempShipment.isPresent())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "ID is yet in the database.");
         }
 
         if((newShipment.getOriginCity() != null) && (newShipment.getDestinyCity() != null) &&
+                (customerList.contains(customer.get())) &&
                 (newShipment.getDestinyAddress() != null) && (newShipment.getRecipientName() != null)){
-            return this.shipmentRepository.save(newShipment);
+            this.shipmentRepository.save(newShipment);
+            return newShipment;
         }else
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Mandatory fields had not been provided.");
@@ -81,7 +105,15 @@ public class ShipmentService {
      * @param shipment
      * @return
      */
-    public  Shipment update(String id, Shipment shipment){
+    public  Shipment update(String id, Shipment shipment, int idEmployee){
+        Optional<Employee> employee = this.employeeRepository.findById(idEmployee);
+
+        if(employee.isPresent() ||
+                employee.get().getEmployeeType() != String.valueOf(Role.DELIVERER) ||
+                employee.get().getEmployeeType() != String.valueOf(Role.COORDINATOR)){
+            throw new RequestException("Permissions denied!");
+        }
+
         int code = Math.abs(id.hashCode());
         if(code > 0){
             Optional<Shipment> tempShipment = this.shipmentRepository.findById(code);
@@ -106,7 +138,8 @@ public class ShipmentService {
                     tempShipment.get().setShippingCosts(shipment.getShippingCosts());
                 if(shipment.getPackets() != null)
                     tempShipment.get().setPackets(shipment.getPackets());
-                return this.shipmentRepository.save(tempShipment.get());
+                this.shipmentRepository.save(tempShipment.get());
+                return tempShipment.get();
             }
             else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -135,5 +168,34 @@ public class ShipmentService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Shipment cannot be deleted.");
     }
+
+    public List<ShipmentDTO> indexByState(TrackingRequest trackingRequest) {
+
+        Integer idCard = trackingRequest.getIdCardNumber();
+
+       Optional<Customer> customer = customerRepository.findById(idCard);
+
+        return index()
+                .stream()
+                .filter(shipment -> shipment.getShipmentState().equals(trackingRequest.getShipmentState()) )
+                .map(shipment -> new ShipmentDTO(
+                        shipment.getCustomer().getIdCardNumber(),
+                        shipment.getOriginCity(),
+                        shipment.getDestinyCity(),
+                        shipment.getDestinyAddress(),
+                        shipment.getRecipientName(),
+                        shipment.getRecipientContact(),
+                        shipment.getPackets().stream().mapToDouble(Packet::getDeclaredValue)
+                                .sum(),
+                        shipment.getPackets().stream().mapToDouble(Packet::getWeight)
+                                .sum(),
+                        shipment.getShippingCosts(),
+                        shipment.getShipmentState(),
+                        shipment.getGuideNumber()
+
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 }

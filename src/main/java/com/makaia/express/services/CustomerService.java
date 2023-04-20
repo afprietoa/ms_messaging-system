@@ -12,8 +12,12 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-    @Autowired
+
     private CustomerRepository customerRepository;
+
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     /**
      *
@@ -56,7 +60,8 @@ public class CustomerService {
 
         if((newCustomer.getEmail() != null) && (newCustomer.getFirstName() != null) &&
                 (newCustomer.getLastName() != null) && (newCustomer.getCellphone() != null)){
-            return this.customerRepository.save(newCustomer);
+            this.customerRepository.save(newCustomer);
+            return newCustomer;
         }else
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Mandatory fields had not been provided.");
@@ -84,7 +89,8 @@ public class CustomerService {
                     tempCustomer.get().setAddress(customer.getAddress());
                 if(customer.getCity() != null)
                     tempCustomer.get().setCity(customer.getCity());
-                return this.customerRepository.save(tempCustomer.get());
+                this.customerRepository.save(tempCustomer.get());
+                return tempCustomer.get();
             }
             else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,

@@ -3,6 +3,7 @@ package com.makaia.express.controllers;
 import com.makaia.express.modules.Packet;
 import com.makaia.express.services.PacketService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,10 @@ public class PacketController {
             @ApiResponse( code = 201, message = "created packet success")
     })
     @ApiOperation(value="packet", notes= "this create a packet", response = Packet.class)
-    @PostMapping("/packet")
+    @PostMapping("/packet/shipment/{idShipment}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Packet insertPacket(@RequestBody Packet packet){
-        return this.packetService.create(packet);
+    public Packet insertPacket(@RequestBody Packet packet, @ApiParam(value = "shipment id", required = true) @PathVariable("idShipment") int idShipment){
+        return this.packetService.create(packet, idShipment);
     }
 
     @PutMapping("/packet/{id}")

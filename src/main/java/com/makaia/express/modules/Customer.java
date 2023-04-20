@@ -22,7 +22,7 @@ public class Customer implements Serializable {
     private String lastName;
     @ApiModelProperty(value = "customer cellphone", example ="3004126895")
     @Column(name = "cellphone")
-    private Integer cellphone;
+    private Long cellphone;
     @ApiModelProperty(value = "customer e-mail", example ="gabi@example.com")
     @Column(name = "email", length = 100)
     private String email;
@@ -36,6 +36,20 @@ public class Customer implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "customer")
     @JsonIgnoreProperties("customer")
     private List<Shipment> shipments;
+
+    public Customer() {}
+
+    public Customer(Integer idCardNumber, String firstName, String lastName,
+                    Long cellphone, String email, String address,
+                    String city) {
+        this.idCardNumber = idCardNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cellphone = cellphone;
+        this.email = email;
+        this.address = address;
+        this.city = city;
+    }
 
     public Integer getIdCardNumber() {
         return idCardNumber;
@@ -57,11 +71,11 @@ public class Customer implements Serializable {
         this.lastName = lastName;
     }
 
-    public Integer getCellphone() {
+    public Long getCellphone() {
         return cellphone;
     }
 
-    public void setCellphone(Integer cellphone) {
+    public void setCellphone(Long cellphone) {
         this.cellphone = cellphone;
     }
 
