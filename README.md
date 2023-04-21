@@ -132,7 +132,7 @@ Request Body
 
 ```json
 {
-    "cedulaCliente": 12345,
+    "cedulaCliente": 3453453,
     "ciudadOrigen":"Medellin",
     "ciudadDestino":"Bogota",
     "direccionDestino": "calle 46 # 69-90",
@@ -140,6 +140,9 @@ Request Body
     "celular" : 3046303886
     "valorDeclaradoPaquete" : 19,000
     "peso" : 1
+    "valorEnvio: 30.000
+    "estadoEnvio: "RECIBIDO"
+    "numeroGuia": 12345
 }
 
 ```
@@ -148,7 +151,7 @@ Response Data
 
 ```java {.highlight .highlight-source-java .bg-black}
 {
-    "cedulaCliente": 12345,
+    "cedulaCliente": 3453453,
     "ciudadOrigen":"Medellin",
     "ciudadDestino":"Bogota",
     "direccionDestino": "calle 46 # 69-90",
@@ -156,6 +159,9 @@ Response Data
     "celular" : 3046303886
     "valorDeclaradoPaquete" : 19,000
     "peso" : 1
+    "valorEnvio: 30.000
+    "estadoEnvio: "RECIBIDO"
+    "numeroGuia": 12345
 }
 
 ```
