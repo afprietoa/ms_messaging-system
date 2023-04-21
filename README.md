@@ -141,7 +141,7 @@ Request Body
     "valorDeclaradoPaquete" : 19.000,
     "peso" : 1,
     "valorEnvio": 30.000,
-    "estadoEnvio: "RECIBIDO",
+    "estadoEnvio": "RECIBIDO",
     "numeroGuia": 12345
 }
 
@@ -160,7 +160,7 @@ Response Data
     "valorDeclaradoPaquete" : 19.000,
     "peso" : 1,
     "valorEnvio": 30.000,
-    "estadoEnvio: "RECIBIDO",
+    "estadoEnvio": "RECIBIDO",
     "numeroGuia": 12345
 }
 
