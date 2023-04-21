@@ -88,7 +88,7 @@ Response Data
 ```
 2. A employee can register in the messaging database, in this ENDPOINT it is validated that the id card number is an integer, and the first and last name contain data, and these can´t be null.
 
-Employee register, request customer ENDPOINT example 
+Employee register, request employee ENDPOINT example 
 (http://localhost:8080/api/v1/employee ) [POST]
 
 Request Body
@@ -128,6 +128,8 @@ Response Data
 ```
 3. A customer can perform the shipment of a packet, it is required that system can create a shipment.
 
+Shipment register, request shipment ENDPOINT example 
+(http://localhost:8080/api/v1/shipment ) [POST]
 Request Body
 
 ```json
