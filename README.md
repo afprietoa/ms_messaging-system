@@ -136,12 +136,12 @@ Request Body
     "ciudadOrigen":"Medellin",
     "ciudadDestino":"Bogota",
     "direccionDestino": "calle 46 # 69-90",
-    "nombreRecibe" : "Juan Manuel"
-    "celular" : 3046303886
-    "valorDeclaradoPaquete" : 19,000
-    "peso" : 1
-    "valorEnvio: 30.000
-    "estadoEnvio: "RECIBIDO"
+    "nombreRecibe" : "Juan Manuel",
+    "celular" : 3046303886,
+    "valorDeclaradoPaquete" : 19.000,
+    "peso" : 1,
+    "valorEnvio": 30.000,
+    "estadoEnvio: "RECIBIDO",
     "numeroGuia": 12345
 }
 
@@ -155,12 +155,12 @@ Response Data
     "ciudadOrigen":"Medellin",
     "ciudadDestino":"Bogota",
     "direccionDestino": "calle 46 # 69-90",
-    "nombreRecibe" : "Juan Manuel"
-    "celular" : 3046303886
-    "valorDeclaradoPaquete" : 19,000
-    "peso" : 1
-    "valorEnvio: 30.000
-    "estadoEnvio: "RECIBIDO"
+    "nombreRecibe" : "Juan Manuel",
+    "celular" : 3046303886,
+    "valorDeclaradoPaquete" : 19.000,
+    "peso" : 1,
+    "valorEnvio": 30.000,
+    "estadoEnvio: "RECIBIDO",
     "numeroGuia": 12345
 }
 
