@@ -86,3 +86,76 @@ Response Data
 }
 
 ```
+2. A employee can register in the messaging database, in this ENDPOINT it is validated that the id card number is an integer, and the first and last name contain data, and these can´t be null.
+
+Employee register, request customer ENDPOINT example 
+(http://localhost:8080/api/v1/employee ) [POST]
+
+Request Body
+
+```json
+{
+    "cedula": 12345,
+    "nombre":"Mateo",
+    "Apellido":"Zapata",
+    "celular": 3046303886
+    "correoElectronico" : "mateo@gmail.com"
+    "direccionResidencia" :"calle 46 # 69-90"
+    "ciudad" : "Medellin"
+    "AntiguedadEmpresa" : 1
+    "rh" : "o+"
+    "tipoEmpleado": "REPARTIDOR"
+}
+
+```
+
+Response Data
+
+```java {.highlight .highlight-source-java .bg-black}
+{
+    "cedula": 12345,
+    "nombre":"Mateo",
+    "Apellido":"Zapata",
+    "celular": 3046303886
+    "correoElectronico" : "mateo@gmail.com"
+    "direccionResidencia" :"calle 46 # 69-90"
+    "ciudad" : "Medellin"
+    "AntiguedadEmpresa" : 1
+    "rh" : "o+"
+    "tipoEmpleado": "REPARTIDOR"
+}
+
+```
+3. A customer can perform the shipment of a packet, it is required that system can create a shipment.
+
+Request Body
+
+```json
+{
+    "cedulaCliente": 12345,
+    "ciudadOrigen":"Medellin",
+    "ciudadDestino":"Bogota",
+    "direccionDestino": "calle 46 # 69-90",
+    "nombreRecibe" : "Juan Manuel"
+    "celular" : 3046303886
+    "valorDeclaradoPaquete" : 19,000
+    "peso" : 1
+}
+
+```
+
+Response Data
+
+```java {.highlight .highlight-source-java .bg-black}
+{
+    "cedulaCliente": 12345,
+    "ciudadOrigen":"Medellin",
+    "ciudadDestino":"Bogota",
+    "direccionDestino": "calle 46 # 69-90",
+    "nombreRecibe" : "Juan Manuel"
+    "celular" : 3046303886
+    "valorDeclaradoPaquete" : 19,000
+    "peso" : 1
+}
+
+```
