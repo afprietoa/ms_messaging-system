@@ -47,3 +47,42 @@ A shipment is defined by
 - delivery hour
 - shipment state
 - shipment costs
+
+# Microservice proposal
+
+REST API allows performing the next functionalities
+
+1. A customer can register in the messaging database, in this ENDPOINT it is validated that the id card number is an integer, and the first and last name contain data, and these can´t be null.
+
+Customer register, request customer ENDPOINT example (http://localhost:8080/api/v1/customer ) [POST]
+
+Request Body
+
+```json
+{
+    "cedula": 12345,
+    "nombre":"Mateo",
+    "Apellido":"Zapata",
+    "celular": 3046303886
+    "correoElectronico" : "mateo@gmail.com"
+    "direccionResidencia" :"calle 46 # 69-90"
+    "ciudad" : "Medellin"
+}
+
+```
+
+Response Data
+
+```java {.highlight .highlight-source-java .bg-black}
+{
+    "cedula": 12345,
+    "nombre":"Mateo",
+    "Apellido":"Zapata",
+    "celular": 3046303886
+    "correoElectronico" : "mateo@gmail.com"
+    "direccionResidencia" :"calle 46 # 69-90"
+    "ciudad" : "Medellin",
+    "shipments": null
+}
+
+```
